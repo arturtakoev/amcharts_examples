@@ -86,13 +86,13 @@ function BarChart() {
 
     // Create axes
     var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-    //categoryAxis.dx = -100;
     categoryAxis.renderer.labels.template.location =
       chartType === '7' ? 0.5 : 1;
     categoryAxis.renderer.ticks.template.location = 0;
     categoryAxis.dataFields.category = 'time';
     categoryAxis.title.text = 'Time';
-    categoryAxis.tooltip.disabled = true;
+    categoryAxis.cursorTooltipEnabled = false;
+    //categoryAxis.tooltip.disabled = true;
     categoryAxis.renderer.grid.template.disabled = true;
     categoryAxis.renderer.ticks.template.disabled = false;
     categoryAxis.renderer.ticks.template.strokeOpacity = 0.4;
@@ -109,13 +109,13 @@ function BarChart() {
       var series = chart.series.push(new am4charts.ColumnSeries());
       series.dataFields.valueY = field;
       series.dataFields.categoryX = 'time';
-      series.dataFields.categoryY = 'timeBefore';
+      //series.dataFields.categoryY = 'timeBefore';
       series.name = name;
       series.stacked = stacked;
       series.columns.template.width = am4core.percent(75);
       /* Add a single HTML-based tooltip to first series */
       if (field === 'added') {
-        series.tooltipHTML = `<div class="seriesTooltip time">{categoryY}-{categoryX}</div>
+        series.tooltipHTML = `<div class="seriesTooltip time">{1}-{categoryX}</div>
         <table class="seriesTooltip">
         
         <tr>        
@@ -153,12 +153,12 @@ function BarChart() {
     marker.cornerRadius(0, 0, 0, 0);
 
     chart.cursor = new am4charts.XYCursor();
-    //chart.cursor.lineX.disabled = true;
+    chart.cursor.xAxis = categoryAxis;
     chart.cursor.fullWidthLineX = true;
     chart.cursor.lineX.strokeWidth = 0;
     chart.cursor.lineX.fill = am4core.color('#8F3985');
     chart.cursor.lineX.fillOpacity = 0.1;
-    chart.cursor.lineY.disabled = true;
+    chart.cursor.lineY.strokeWidth = 0;
   });
 
   return (
