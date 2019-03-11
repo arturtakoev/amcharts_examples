@@ -1,0 +1,16 @@
+.seriesTooltip {
+  color: #000;
+}
+.time {
+  padding: 12px;
+  color: gray;
+}
+.seriesUpdatedBullet {
+  color: #73be58;
+}
+.seriesAddedBullet {
+  color: #41aad7;
+}
+.seriesDeletedBullet {
+  color: #e76c63;
+}
