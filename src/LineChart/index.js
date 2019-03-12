@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 //import logo from './logo.svg';
-import './LineChart.css';
-import * as am4core from '@amcharts/amcharts4/core';
-import * as am4charts from '@amcharts/amcharts4/charts';
-import am4themes_animated from '@amcharts/amcharts4/themes/animated';
+import "./LineChart.css";
+import * as am4core from "@amcharts/amcharts4/core";
+import * as am4charts from "@amcharts/amcharts4/charts";
+import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 
 am4core.useTheme(am4themes_animated);
 
 class LineChart extends Component {
   componentDidMount() {
-    let chart = am4core.create('linechartdiv', am4charts.XYChart);
+    let chart = am4core.create("linechartdiv", am4charts.XYChart);
 
     chart.paddingRight = 50;
     let data = [];
@@ -28,22 +28,22 @@ class LineChart extends Component {
         time: i < 10 ? `0${i}:00` : `${i}:00`,
         added: added,
         deleted: deleted,
-        updated: updated,
+        updated: updated
       });
     }
     chart.data = data;
 
     // Modify chart's colors
     chart.colors.list = [
-      am4core.color('#41aad7'),
-      am4core.color('#73be58'),
-      am4core.color('#e76c63'),
+      am4core.color("#41aad7"),
+      am4core.color("#73be58"),
+      am4core.color("#e76c63")
     ];
 
     let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-    categoryAxis.dataFields.category = 'time';
+    categoryAxis.dataFields.category = "time";
     categoryAxis.renderer.grid.template.disabled = true;
-    categoryAxis.title.text = 'Time';
+    categoryAxis.title.text = "Time";
     categoryAxis.tooltip.disabled = true;
     categoryAxis.renderer.ticks.template.length = 5;
     categoryAxis.renderer.ticks.template.disabled = false;
@@ -52,28 +52,28 @@ class LineChart extends Component {
     let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
     valueAxis.tooltip.disabled = true;
     valueAxis.renderer.minWidth = 35;
-    valueAxis.title.text = 'Amount';
+    valueAxis.title.text = "Amount";
 
     let seriesAdded = chart.series.push(new am4charts.LineSeries());
-    seriesAdded.dataFields.categoryX = 'time';
-    seriesAdded.dataFields.valueY = 'added';
+    seriesAdded.dataFields.categoryX = "time";
+    seriesAdded.dataFields.valueY = "added";
     seriesAdded.strokeWidth = 2;
     // static
-    seriesAdded.legendSettings.labelText = 'Added';
+    seriesAdded.legendSettings.labelText = "Added";
 
     let seriesDeleted = chart.series.push(new am4charts.LineSeries());
-    seriesDeleted.dataFields.categoryX = 'time';
-    seriesDeleted.dataFields.valueY = 'deleted';
+    seriesDeleted.dataFields.categoryX = "time";
+    seriesDeleted.dataFields.valueY = "deleted";
     seriesDeleted.strokeWidth = 2;
     // static
-    seriesDeleted.legendSettings.labelText = 'Deleted';
+    seriesDeleted.legendSettings.labelText = "Deleted";
 
     let seriesUpdated = chart.series.push(new am4charts.LineSeries());
-    seriesUpdated.dataFields.categoryX = 'time';
-    seriesUpdated.dataFields.valueY = 'updated';
+    seriesUpdated.dataFields.categoryX = "time";
+    seriesUpdated.dataFields.valueY = "updated";
     seriesUpdated.strokeWidth = 2;
     // static
-    seriesUpdated.legendSettings.labelText = 'Updated';
+    seriesUpdated.legendSettings.labelText = "Updated";
 
     // Add bullets
     var bulletAdded = seriesAdded.bullets.push(new am4charts.CircleBullet());
@@ -91,34 +91,33 @@ class LineChart extends Component {
     bulletUpdated.properties.scale = 0;
 
     // Create hover state
-    var hoverStateAdded = bulletAdded.states.create('hover');
+    var hoverStateAdded = bulletAdded.states.create("hover");
     hoverStateAdded.properties.scale = 1;
-    var hoverStateDeleted = bulletDeleted.states.create('hover');
+    var hoverStateDeleted = bulletDeleted.states.create("hover");
     hoverStateDeleted.properties.scale = 1;
-    var hoverStateUpdated = bulletUpdated.states.create('hover');
+    var hoverStateUpdated = bulletUpdated.states.create("hover");
     hoverStateUpdated.properties.scale = 1;
 
     /* Add a single HTML-based tooltip to first series */
-    seriesAdded.tooltipHTML = `<div class="seriesTooltip time">{categoryX}</div>
-      <table class="seriesTooltip">
-      
-      <tr>        
-        <th align="left"><span class="seriesAddedBullet">&#8226;</span> Added:</th>
-        <td>{added}</td>
+    seriesAdded.tooltipHTML = `
+    <div class="tooltip">
+      <div class="tooltip-title">{categoryY}{categoryX}</div>
+      <table class="tooltip-content" >
+        <tr>        
+          <td align="left"><span class="seriesAddedBullet" >Added</span>: {added}</td>              
+        </tr>
+        <tr>        
+          <td align="left"><span class="seriesUpdatedBullet">Updated</span>: {updated}</td>              
+        </tr>
+        <tr>        
+        <td align="left"><span class="seriesDeletedBullet">Added</span>: {deleted}</td>              
       </tr>
-      <tr>
-        <th align="left"><span class="seriesDeletedBullet">&#8226;</span> Deleted:</th>
-        <td>{deleted}</td>
-      </tr>
-      <tr>
-        <th align="left"><span class="seriesUpdatedBullet">&#8226;</span> Updated:</th>
-        <td>{updated}</td>
-      </tr>
-      </table>
+      </table> 
+    </div>
     `;
-    seriesAdded.tooltip.pointerOrientation = 'horizontal';
+    seriesAdded.tooltip.pointerOrientation = "horizontal";
     seriesAdded.tooltip.getFillFromObject = false;
-    seriesAdded.tooltip.background.fill = am4core.color('#FFF');
+    seriesAdded.tooltip.background.fill = am4core.color("#FFF");
     seriesAdded.tooltip.autoTextColor = false;
 
     chart.cursor = new am4charts.XYCursor();
@@ -127,7 +126,7 @@ class LineChart extends Component {
 
     // add legend
     chart.legend = new am4charts.Legend();
-    chart.legend.position = 'top';
+    chart.legend.position = "top";
     this.chart = chart;
   }
 
@@ -138,7 +137,7 @@ class LineChart extends Component {
   }
 
   render() {
-    return <div id="linechartdiv" style={{ width: '100%', height: '500px' }} />;
+    return <div id="linechartdiv" style={{ width: "100%", height: "500px" }} />;
   }
 }
 
