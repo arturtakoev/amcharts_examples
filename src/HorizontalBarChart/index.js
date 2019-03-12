@@ -32,9 +32,9 @@ function BarChart() {
     categoryAxis.cursorTooltipEnabled = false;
     categoryAxis.renderer.grid.template.disabled = true;
     //TODO: ticks for now are not displayed properly on Y axis (wrong position)
-    //categoryAxis.renderer.ticks.template.disabled = false;
-    //categoryAxis.renderer.ticks.template.strokeOpacity = 0.4;
-    //categoryAxis.renderer.ticks.template.length = 10;
+    categoryAxis.renderer.ticks.template.disabled = false;
+    categoryAxis.renderer.ticks.template.strokeOpacity = 0.4;
+    categoryAxis.renderer.ticks.template.length = 10;
     //categoryAxis.renderer.ticks.template.location = 1;
 
     var valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
