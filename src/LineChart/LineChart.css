@@ -1,9 +1,13 @@
-.seriesTooltip {
+.tooltip {
   color: #000;
 }
-.time {
-  padding: 12px;
-  color: gray;
+
+.tooltip-title {
+  font-weight: bold;
+  padding: 0 0 12px 4px;
+}
+.tooltip-content {
+  font-weight: 200;
 }
 .seriesUpdatedBullet {
   color: #73be58;

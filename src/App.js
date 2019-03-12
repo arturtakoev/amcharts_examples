@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
-import './App.css';
-import LineChart from './LineChart';
-import BarChart from './BarChart';
+import React, { Component } from "react";
+import "./App.css";
+import LineChart from "./LineChart";
+import BarChart from "./BarChart";
+import HorizontalBarChart from "./HorizontalBarChart";
 
 class App extends Component {
   render() {
@@ -9,6 +10,7 @@ class App extends Component {
       <>
         <LineChart />
         <BarChart />
+        <HorizontalBarChart />
       </>
     );
   }
