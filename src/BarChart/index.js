@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
+import { generateData } from './utils';
 
 am4core.useTheme(am4themes_animated);
 
@@ -15,61 +16,6 @@ function BarChart() {
     setChartType(value);
     const newData = generateData(value);
     setData(newData);
-  }
-
-  function generateData(type) {
-    let data = [];
-    let deleted = 10;
-    let added = 10;
-    let updated = 10;
-    switch (type) {
-      case '24':
-        for (let i = 1; i < 7; i++) {
-          deleted = Math.round(Math.random() * 10);
-          added = Math.round(Math.random() * 10);
-          updated = Math.round(Math.random() * 10);
-          data.push({
-            timeBefore: i * 4 - 4 < 10 ? `0${i * 4 - 4}:00` : `${i * 4 - 4}:00`,
-            time: i * 4 < 10 ? `0${i * 4}:00` : `${i * 4}:00`,
-            added: added,
-            deleted: deleted,
-            updated: updated,
-          });
-        }
-        // data.push({
-        //   time: `04:01`,
-        // });
-        return data;
-      case '7':
-        for (let i = 1; i < 7; i++) {
-          deleted = Math.round(Math.random() * 10);
-          added = Math.round(Math.random() * 10);
-          updated = Math.round(Math.random() * 10);
-          data.push({
-            time: i < 10 ? `0${i}.03` : `${i}.03`,
-            added: added,
-            deleted: deleted,
-            updated: updated,
-          });
-        }
-        return data;
-      case '30':
-        for (let i = 1; i < 7; i++) {
-          deleted = Math.round(Math.random() * 10);
-          added = Math.round(Math.random() * 10);
-          updated = Math.round(Math.random() * 10);
-          data.push({
-            time: i * 5 < 10 ? `0${i * 5}.03` : `${i * 5}.03`,
-            added: added,
-            deleted: deleted,
-            updated: updated,
-          });
-        }
-
-        return data;
-      default:
-        break;
-    }
   }
 
   useEffect(() => {
@@ -109,13 +55,13 @@ function BarChart() {
       var series = chart.series.push(new am4charts.ColumnSeries());
       series.dataFields.valueY = field;
       series.dataFields.categoryX = 'time';
-      //series.dataFields.categoryY = 'timeBefore';
+      series.dataFields.categoryY = 'timeBefore';
       series.name = name;
       series.stacked = stacked;
       series.columns.template.width = am4core.percent(75);
       /* Add a single HTML-based tooltip to first series */
       if (field === 'added') {
-        series.tooltipHTML = `<div class="seriesTooltip time">{1}-{categoryX}</div>
+        series.tooltipHTML = `<div class="seriesTooltip time">{categoryY}-{categoryX}</div>
         <table class="seriesTooltip">
         
         <tr>        
@@ -132,7 +78,6 @@ function BarChart() {
         </tr>
         </table>
   `;
-        //series.tooltip.pointerOrientation = 'horizontal';
         series.tooltip.getFillFromObject = false;
         series.tooltip.background.fill = am4core.color('#FFF');
         series.tooltip.autoTextColor = false;
