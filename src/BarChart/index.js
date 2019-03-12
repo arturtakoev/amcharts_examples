@@ -42,6 +42,7 @@ function BarChart() {
     categoryAxis.renderer.grid.template.disabled = true;
     categoryAxis.renderer.ticks.template.disabled = false;
     categoryAxis.renderer.ticks.template.strokeOpacity = 0.4;
+    categoryAxis.renderer.ticks.template.length = 10;
     categoryAxis.renderer.cellEndLocation = 0.8;
     categoryAxis.renderer.cellStartLocation = 0.2;
 
@@ -61,23 +62,22 @@ function BarChart() {
       series.columns.template.width = am4core.percent(75);
       /* Add a single HTML-based tooltip to first series */
       if (field === "added") {
-        series.tooltipHTML = `<div class="seriesTooltip time">{categoryY}-{categoryX}</div>
-        <table class="seriesTooltip">
-        
-        <tr>        
-          <th align="left"><span class="seriesAddedBullet">&#8226;</span> Added:</th>
-          <td>{added}</td>
-        </tr>
-        <tr>
-          <th align="left"><span class="seriesDeletedBullet">&#8226;</span> Deleted:</th>
-          <td>{deleted}</td>
-        </tr>
-        <tr>
-          <th align="left"><span class="seriesUpdatedBullet">&#8226;</span> Updated:</th>
-          <td>{updated}</td>
-        </tr>
-        </table>
-  `;
+        series.tooltipHTML = `
+        <div class="tooltip">
+          <div class="tooltip-title">{categoryY}{categoryX}</div>
+          <table class="tooltip-content" >
+            <tr>        
+              <td align="left"><span class="seriesAddedBullet" >Added</span>: {added}</td>              
+            </tr>
+            <tr>        
+              <td align="left"><span class="seriesUpdatedBullet">Updated</span>: {updated}</td>              
+            </tr>
+            <tr>        
+            <td align="left"><span class="seriesDeletedBullet">Added</span>: {deleted}</td>              
+          </tr>
+          </table> 
+        </div>
+        `;
         series.tooltip.getFillFromObject = false;
         series.tooltip.background.fill = am4core.color("#FFF");
         series.tooltip.autoTextColor = false;
@@ -93,7 +93,7 @@ function BarChart() {
     chart.legend = new am4charts.Legend();
     chart.legend.position = "top";
     chart.legend.useDefaultMarker = true;
-    chart.legend.labels.template.fontWeight = "bold";
+    //chart.legend.labels.template.fontWeight = "bold";
     let marker = chart.legend.markers.template.children.getIndex(0);
     marker.cornerRadius(0, 0, 0, 0);
 
@@ -101,8 +101,8 @@ function BarChart() {
     chart.cursor.xAxis = categoryAxis;
     chart.cursor.fullWidthLineX = true;
     chart.cursor.lineX.strokeWidth = 0;
-    chart.cursor.lineX.fill = am4core.color("#8F3985");
-    chart.cursor.lineX.fillOpacity = 0.1;
+    chart.cursor.lineX.fill = am4core.color("#ccd6eb");
+    chart.cursor.lineX.fillOpacity = 0.25;
     chart.cursor.lineY.strokeWidth = 0;
   });
 
