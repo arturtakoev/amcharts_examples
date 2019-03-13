@@ -4,7 +4,6 @@ export function generateData(type) {
   let data = [];
   let before = 10;
   let now = 10;
-  let updated = 10;
   switch (type) {
     case "24 hours":
       for (let i = 1; i < 7; i++) {
