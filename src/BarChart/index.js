@@ -25,9 +25,9 @@ function BarChart() {
 
     // Modify chart's colors
     chart.colors.list = [
-      am4core.color("#41aad7"),
       am4core.color("#73be58"),
-      am4core.color("#e76c63")
+      am4core.color("#e76c63"),
+      am4core.color("#41aad7")
     ];
 
     // Create axes
