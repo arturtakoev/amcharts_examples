@@ -101,6 +101,7 @@ function BarChart() {
     chart.legend.position = "top";
     chart.legend.useDefaultMarker = true;
     chart.legend.dx = 64;
+    //chart.legend._dataItems.values[0].hidden = true;
 
     let marker = chart.legend.markers.template.children.getIndex(0);
     console.log("marker", marker);

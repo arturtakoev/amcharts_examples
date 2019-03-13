@@ -14,7 +14,6 @@ function BarChart() {
   useEffect(() => {
     let chart = am4core.create("horsepchartdiv", am4charts.XYChart);
     chart.paddingRight = 50;
-    console.log(data);
     chart.data = data;
 
     // Modify chart's colors
