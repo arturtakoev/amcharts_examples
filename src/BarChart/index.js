@@ -27,7 +27,8 @@ function BarChart() {
     chart.colors.list = [
       am4core.color("#73be58"),
       am4core.color("#e76c63"),
-      am4core.color("#41aad7")
+      am4core.color("#41aad7"),
+      am4core.color("#FFF")
     ];
 
     // Create axes
@@ -43,8 +44,8 @@ function BarChart() {
     categoryAxis.renderer.ticks.template.disabled = false;
     categoryAxis.renderer.ticks.template.strokeOpacity = 0.4;
     categoryAxis.renderer.ticks.template.length = 10;
-    categoryAxis.renderer.cellEndLocation = 0.8;
-    categoryAxis.renderer.cellStartLocation = 0.2;
+    //categoryAxis.renderer.cellEndLocation = 0.8;
+    categoryAxis.renderer.cellStartLocation = 0.2; //HACK to show tooltip always
 
     var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
     valueAxis.min = 0;
@@ -52,16 +53,19 @@ function BarChart() {
     valueAxis.tooltip.disabled = true;
 
     // Create series
-    function createSeries(field, name, stacked) {
+    function createSeries(field, name, withTooltip) {
       var series = chart.series.push(new am4charts.ColumnSeries());
       series.dataFields.valueY = field;
       series.dataFields.categoryX = "time";
       series.dataFields.categoryY = "timeBefore";
       series.name = name;
-      series.stacked = stacked;
-      series.columns.template.width = am4core.percent(75);
-      /* Add a single HTML-based tooltip to first series */
-      if (field === "added") {
+      series.stacked = false;
+      series.columns.template.width = am4core.percent(65);
+
+      if (withTooltip) {
+        /* Add a single HTML-based tooltip to first series */
+        //console.log(series.isHidden);
+        series.columns.template.width = am4core.percent(0);
         series.tooltipHTML = `
         <div class="tooltip">
           <div class="tooltip-title">{categoryY}{categoryX}</div>
@@ -81,21 +85,33 @@ function BarChart() {
         series.tooltip.getFillFromObject = false;
         series.tooltip.background.fill = am4core.color("#FFF");
         series.tooltip.autoTextColor = false;
+
+        //series.tooltip.disabled = true;
       }
     }
 
     createSeries("added", "Added", false);
     createSeries("deleted", "Deleted", false);
     createSeries("updated", "Updated", false);
+    createSeries("added", null, true); //HACK to show tooltip always
 
-    console.log(chart.series);
+    //console.log(chart.series);
     // Add legend
     chart.legend = new am4charts.Legend();
     chart.legend.position = "top";
     chart.legend.useDefaultMarker = true;
-    //chart.legend.labels.template.fontWeight = "bold";
+    chart.legend.dx = 64;
+
     let marker = chart.legend.markers.template.children.getIndex(0);
+    console.log("marker", marker);
+    console.log(chart.legend);
     marker.cornerRadius(0, 0, 0, 0);
+
+    // Add legend events
+    chart.legend.itemContainers.template.events.on("hit", function(ev) {
+      console.log("data", chart.data);
+      console.log(ev.target.dataItem.dataContext);
+    });
 
     chart.cursor = new am4charts.XYCursor();
     chart.cursor.xAxis = categoryAxis;
@@ -104,6 +120,7 @@ function BarChart() {
     chart.cursor.lineX.fill = am4core.color("#ccd6eb");
     chart.cursor.lineX.fillOpacity = 0.25;
     chart.cursor.lineY.strokeWidth = 0;
+    chart.cursor.tooltip.disabled = false;
   });
 
   return (
