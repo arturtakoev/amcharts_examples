@@ -4,6 +4,7 @@ import LineChart from "./LineChart";
 import BarChart from "./BarChart";
 import HorizontalBarChart from "./HorizontalBarChart";
 import HorizontalSeparated from "./HorizontalSeparated";
+import Donut from "./PieChart";
 
 class App extends Component {
   render() {
@@ -13,6 +14,7 @@ class App extends Component {
         <HorizontalSeparated />
         <BarChart />
         <HorizontalBarChart />
+        <Donut />
       </>
     );
   }

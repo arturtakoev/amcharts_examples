@@ -1,0 +1,14 @@
+.hbar-tooltip-title {
+  padding: 0 0 12px 4px;
+}
+.hbar-bullet-now {
+  color: #41aad7;
+}
+
+.hbar-bullet-before {
+  color: #9ed5ec;
+}
+
+.hbar-value {
+  font-weight: bold;
+}
