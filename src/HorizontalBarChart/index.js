@@ -42,6 +42,8 @@ function BarChart() {
     valueAxis.title.text = "Amount";
     valueAxis.tooltip.disabled = true;
 
+    window.chart = chart;
+
     /** Create series */
     function createSeries(field, name) {
       var series = chart.series.push(new am4charts.ColumnSeries());
@@ -53,6 +55,7 @@ function BarChart() {
       /* Add a single HTML-based tooltip to first series */
       if (field === "now") {
         series.columns.template.height = am4core.percent(50);
+        series.tooltipContainer.stroke = am4core.color("#ccd6eb");
         series.tooltipHTML = `
         <div class="tooltip">
           <div class="hbar-tooltip-title" >{categoryY}{categoryX}</div>
@@ -74,6 +77,8 @@ function BarChart() {
           </table> 
         </div>
         `;
+        series.tooltip.getStrokeFromObject = true;
+        series.tooltip.stroke = am4core.color("#000");
         series.tooltip.getFillFromObject = false;
         series.tooltip.background.fill = am4core.color("#FFF");
         series.tooltip.autoTextColor = false;

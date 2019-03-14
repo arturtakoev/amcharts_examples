@@ -117,6 +117,7 @@ class LineChart extends Component {
     `;
     seriesAdded.tooltip.pointerOrientation = "horizontal";
     seriesAdded.tooltip.getFillFromObject = false;
+    seriesAdded.tooltip.getStrokeFromObject = true;
     seriesAdded.tooltip.background.fill = am4core.color("#FFF");
     seriesAdded.tooltip.autoTextColor = false;
 

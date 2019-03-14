@@ -83,6 +83,7 @@ function BarChart() {
         </div>
         `;
         series.tooltip.getFillFromObject = false;
+        series.tooltip.getStrokeFromObject = true;
         series.tooltip.background.fill = am4core.color("#FFF");
         series.tooltip.autoTextColor = false;
 

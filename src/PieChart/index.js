@@ -48,6 +48,7 @@ function BarChart() {
     </div>
     `;
     pieSeries.tooltip.getFillFromObject = false;
+    pieSeries.tooltip.getStrokeFromObject = true;
     pieSeries.tooltip.background.fill = am4core.color("#FFF");
     pieSeries.tooltip.autoTextColor = false;
 
