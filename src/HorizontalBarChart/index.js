@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
-import { generateData } from "./utils";
+import { generateData } from "./data";
 import { theme } from "../theme";
+import { generateTooltipContent } from "../utils";
 
 am4core.useTheme(am4themes_animated);
 
@@ -30,7 +31,11 @@ function BarChart() {
     chart.data = data;
 
     /** Modify chart's colors */
-    chart.colors.list = [am4core.color(lastColor), am4core.color(beforeColor)];
+    chart.colors.list = [
+      am4core.color(lastColor),
+      am4core.color(beforeColor),
+      am4core.color("#FFF")
+    ];
 
     /** Create axes */
     var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
@@ -48,56 +53,55 @@ function BarChart() {
     valueAxis.title.text = "Amount";
     valueAxis.tooltip.disabled = true;
 
-    window.chart = chart;
-
     /** Create series */
-    function createSeries(field, name) {
+    function createSeries(field, name, legendLabel, withTooltip, columnHeight) {
       var series = chart.series.push(new am4charts.ColumnSeries());
       series.dataFields.valueX = field;
       series.dataFields.categoryY = "tag";
       series.name = name;
       series.clustered = false;
-
+      series.legendSettings.labelText = legendLabel;
+      series.columns.template.height = am4core.percent(columnHeight);
       /* Add a single HTML-based tooltip to first series */
-      if (field === "now") {
-        series.columns.template.height = am4core.percent(50);
-        series.tooltipHTML = `
-        <div class="tooltip">
-          <div class="tooltip-title" >{categoryY}{categoryX}</div>
-          <table class="tooltip-content" >
-            <tr>        
-              <td align="left">
-              <span style="color: ${lastColor}">&#9632</span>
-              Last ${chartType}: 
-              <span class="bold-value">{now}</span>
-              </td>              
-            </tr>
-            <tr>        
-            <td align="left">
-            <span style="color: ${beforeColor}">&#9632</span>
-            ${chartType} before: 
-            <span class="bold-value">{before}</span>
-            </td>              
-          </tr>
-          </table> 
-        </div>
-        `;
+      if (withTooltip) {
+        const tooltipConfig = {
+          bullet: "&#9632",
+          last: {
+            color: lastColor,
+            description: `Last ${chartType}`
+          },
+          before: {
+            color: beforeColor,
+            description: `${chartType} before`
+          }
+        };
+        series.adapter.add("tooltipHTML", function() {
+          return `
+          <div class="tooltip">
+            <div class="tooltip-title" >{categoryY}{categoryX}</div>
+            <table class="tooltip-content" >
+              ${generateTooltipContent(chart.series, tooltipConfig)}
+            </table> 
+          </div>
+          `;
+        });
         series.tooltip.getStrokeFromObject = true;
         series.tooltip.getFillFromObject = false;
         series.tooltip.background.fill = am4core.color("#FFF");
-        series.tooltip.autoTextColor = false;
-      } else {
-        series.columns.template.height = am4core.percent(25);
       }
     }
 
-    createSeries("now", `Last ${chartType}`);
-    createSeries("before", `${chartType} before`);
+    createSeries("now", `last`, `Last ${chartType}`, false, 50);
+    createSeries("before", `before`, `${chartType} before`, false, 25);
+    createSeries("now", null, null, true, 0); //HACK invisible column will show the tooltip
     // Add legend
     chart.legend = new am4charts.Legend();
     chart.legend.position = "top";
     chart.legend.useDefaultMarker = true;
+    chart.legend.adapter.add("label");
+    chart.legend.dx = 64; //HACK
     let marker = chart.legend.markers.template.children.getIndex(0);
+
     marker.cornerRadius(0, 0, 0, 0);
 
     chart.cursor = new am4charts.XYCursor();
@@ -107,6 +111,11 @@ function BarChart() {
     chart.cursor.lineX.fill = am4core.color("#ccd6eb");
     chart.cursor.lineX.fillOpacity = 0.25;
     chart.cursor.lineY.strokeWidth = 0;
+
+    /**
+     * Uncomment for debug in browser window
+     */
+    //window.chart = chart;
   });
 
   return (

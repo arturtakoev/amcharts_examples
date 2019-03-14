@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
-import { generateData } from "./utils";
+import { generateData } from "./data";
+import { generateTooltipContent } from "../utils";
 import { theme } from "../theme";
 
 am4core.useTheme(am4themes_animated);
@@ -12,12 +13,17 @@ function BarChart() {
   const initData = generateData(chartType);
   const [data, setData] = useState(initData);
 
+  /**
+   * Update charts
+   * @param {String} value
+   */
   function handleButtonClick(value) {
     setChartType(value);
     const newData = generateData(value);
     setData(newData);
   }
 
+  /** Get the needed colors from theme */
   const {
     charts: {
       green: { primary: addedColor },
@@ -39,7 +45,9 @@ function BarChart() {
       am4core.color("#FFF")
     ];
 
-    // Create axes
+    /**
+     * Create category axis
+     */
     var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.renderer.labels.template.location =
       chartType === "7" ? 0.5 : 1;
@@ -47,20 +55,25 @@ function BarChart() {
     categoryAxis.dataFields.category = "time";
     categoryAxis.title.text = "Time";
     categoryAxis.cursorTooltipEnabled = false;
-    //categoryAxis.tooltip.disabled = true;
     categoryAxis.renderer.grid.template.disabled = true;
     categoryAxis.renderer.ticks.template.disabled = false;
     categoryAxis.renderer.ticks.template.strokeOpacity = 0.4;
     categoryAxis.renderer.ticks.template.length = 10;
-    //categoryAxis.renderer.cellEndLocation = 0.8;
     categoryAxis.renderer.cellStartLocation = 0.2; //HACK to show tooltip always
-
+    /**
+     * Value axis
+     */
     var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
     valueAxis.min = 0;
     valueAxis.title.text = "Amount";
     valueAxis.tooltip.disabled = true;
 
-    // Create series
+    /**
+     * Create series
+     * @param {String} field
+     * @param {String} name
+     * @param {Boolean} withTooltip
+     */
     function createSeries(field, name, withTooltip) {
       var series = chart.series.push(new am4charts.ColumnSeries());
       series.dataFields.valueY = field;
@@ -73,63 +86,47 @@ function BarChart() {
       if (withTooltip) {
         /* Add a single HTML-based tooltip to first series */
         series.columns.template.width = am4core.percent(0);
-        series.tooltipHTML = `
-        <div class="tooltip">
-          <div class="tooltip-title" >{categoryY}{categoryX}</div>
-          <table class="tooltip-content" >
-            <tr>        
-              <td align="left">
-              <span style="color: ${addedColor};">
-              &#9632
-              </span>
-                Added: 
-              <span class="bold-value">{added}</span>
-              </td>              
-            </tr>
-            <tr>        
-              <td align="left">
-              <span style="color: ${deletedColor};">
-                &#9632
-              </span>
-                Deleted: 
-              <span class="bold-value">{deleted}</span>
-              </td>              
-            </tr>
-            <tr>        
-              <td align="left">
-              <span style="color: ${updatedColor};">
-                &#9632
-              </span>
-                Updated: 
-              <span class="bold-value">{updated}</span>
-              </td>              
-            </tr>
-          </table> 
-        </div>
-        `;
+        const tooltipConfig = {
+          bullet: "&#9632",
+          Added: { color: addedColor, description: "Added" },
+          Updated: { color: updatedColor, description: "Updated" },
+          Deleted: { color: deletedColor, description: "Deleted" }
+        };
+        series.adapter.add("tooltipHTML", function() {
+          return `
+          <div class="tooltip">
+            <div class="tooltip-title" >{categoryY}{categoryX}</div>
+            <table class="tooltip-content" >
+              ${generateTooltipContent(chart.series, tooltipConfig)}
+            </table> 
+          </div>
+          `;
+        });
         series.tooltip.getFillFromObject = false;
         series.tooltip.getStrokeFromObject = true;
         series.tooltip.background.fill = am4core.color("#FFF");
         series.tooltip.autoTextColor = false;
-
-        //series.tooltip.disabled = true;
       }
     }
 
     createSeries("added", "Added", false);
     createSeries("deleted", "Deleted", false);
     createSeries("updated", "Updated", false);
-    createSeries("added", null, true); //HACK to show tooltip always
+    createSeries("added", null, true); //HACK invisible column will show the tooltip
 
-    // Add legend
+    /**
+     * Legend
+     */
     chart.legend = new am4charts.Legend();
     chart.legend.position = "top";
     chart.legend.useDefaultMarker = true;
     chart.legend.dx = 64; //HACK
-
     let marker = chart.legend.markers.template.children.getIndex(0);
     marker.cornerRadius(0, 0, 0, 0);
 
+    /**
+     * Cursor
+     */
     chart.cursor = new am4charts.XYCursor();
     chart.cursor.xAxis = categoryAxis;
     chart.cursor.fullWidthLineX = true;
@@ -138,6 +135,10 @@ function BarChart() {
     chart.cursor.lineX.fillOpacity = 0.25;
     chart.cursor.lineY.strokeWidth = 0;
     chart.cursor.tooltip.disabled = false;
+    /**
+     * Uncomment for debug in browser window
+     */
+    //window.chart = chart;
   });
 
   return (

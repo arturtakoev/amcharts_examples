@@ -3,7 +3,8 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import { theme } from "../theme";
-import { generateData } from "./utils";
+import { generateData } from "./data";
+import { generateTooltipContent } from "../utils";
 
 am4core.useTheme(am4themes_animated);
 
@@ -92,18 +93,21 @@ class LineChart extends Component {
     let seriesAdded = chart.series.push(new am4charts.LineSeries());
     seriesAdded.dataFields.categoryX = "time";
     seriesAdded.dataFields.valueY = "added";
+    seriesAdded.name = "Added";
     seriesAdded.strokeWidth = 2;
     seriesAdded.legendSettings.labelText = "Added";
 
     let seriesDeleted = chart.series.push(new am4charts.LineSeries());
     seriesDeleted.dataFields.categoryX = "time";
     seriesDeleted.dataFields.valueY = "deleted";
+    seriesDeleted.name = "Deleted";
     seriesDeleted.strokeWidth = 2;
     seriesDeleted.legendSettings.labelText = "Deleted";
 
     let seriesUpdated = chart.series.push(new am4charts.LineSeries());
     seriesUpdated.dataFields.categoryX = "time";
     seriesUpdated.dataFields.valueY = "updated";
+    seriesUpdated.name = "Updated";
     seriesUpdated.strokeWidth = 2;
     seriesUpdated.legendSettings.labelText = "Updated";
 
@@ -143,7 +147,24 @@ class LineChart extends Component {
     /*
      * Add a single HTML-based tooltip to specially created series
      */
-    seriesTooltip.tooltipHTML = tooltipHTML;
+
+    const tooltipConfig = {
+      bullet: "&#9632",
+      Added: { color: addedColor, description: "Added" },
+      Updated: { color: updatedColor, description: "Updated" },
+      Deleted: { color: deletedColor, description: "Deleted" }
+    };
+    seriesTooltip.adapter.add("tooltipHTML", function() {
+      return `
+      <div class="tooltip">
+        <div class="tooltip-title" >{categoryY}{categoryX}</div>
+        <table class="tooltip-content" >
+          ${generateTooltipContent(chart.series, tooltipConfig)}
+        </table> 
+      </div>
+      `;
+    });
+    //seriesTooltip.tooltipHTML = tooltipHTML;
     seriesTooltip.tooltip.pointerOrientation = "horizontal";
     seriesTooltip.tooltip.getFillFromObject = false;
     seriesTooltip.tooltip.background.fill = am4core.color("#FFF");
@@ -163,6 +184,8 @@ class LineChart extends Component {
     chart.legend.position = "top";
     this.chart = chart;
     chart.legend.dx = 64; //HACK
+
+    window.chart = chart;
   }
 
   componentWillUnmount() {
