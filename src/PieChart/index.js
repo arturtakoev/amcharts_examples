@@ -74,7 +74,6 @@ function BarChart() {
 
     let marker = chart.legend.markers.template.children.getIndex(0);
     marker.cornerRadius(0, 0, 0, 0);
-    console.log(chart.legend);
 
     var label = chart.seriesContainer.createChild(am4core.Label);
     label.text = `${total}`;

@@ -72,7 +72,6 @@ function BarChart() {
 
       if (withTooltip) {
         /* Add a single HTML-based tooltip to first series */
-        //console.log(series.isHidden);
         series.columns.template.width = am4core.percent(0);
         series.tooltipHTML = `
         <div class="tooltip">
@@ -122,24 +121,14 @@ function BarChart() {
     createSeries("updated", "Updated", false);
     createSeries("added", null, true); //HACK to show tooltip always
 
-    //console.log(chart.series);
     // Add legend
     chart.legend = new am4charts.Legend();
     chart.legend.position = "top";
     chart.legend.useDefaultMarker = true;
     chart.legend.dx = 64; //HACK
-    //chart.legend._dataItems.values[0].hidden = true;
 
     let marker = chart.legend.markers.template.children.getIndex(0);
-    console.log("marker", marker);
-    console.log(chart.legend);
     marker.cornerRadius(0, 0, 0, 0);
-
-    // Add legend events
-    chart.legend.itemContainers.template.events.on("hit", function(ev) {
-      console.log("data", chart.data);
-      console.log(ev.target.dataItem.dataContext);
-    });
 
     chart.cursor = new am4charts.XYCursor();
     chart.cursor.xAxis = categoryAxis;
