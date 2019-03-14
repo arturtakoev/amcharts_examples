@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import "./index.css";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import { generateData } from "./utils";
+import { theme } from "../theme";
 
 am4core.useTheme(am4themes_animated);
 
@@ -18,13 +18,19 @@ function BarChart() {
     setData(newData);
   }
 
+  const {
+    charts: {
+      blue: { primary: lastColor, secondary: beforeColor }
+    }
+  } = theme;
+
   useEffect(() => {
     let chart = am4core.create("horizbarchartdiv", am4charts.XYChart);
     chart.paddingRight = 50;
     chart.data = data;
 
     /** Modify chart's colors */
-    chart.colors.list = [am4core.color("#41aad7"), am4core.color("#9ed5ec")];
+    chart.colors.list = [am4core.color(lastColor), am4core.color(beforeColor)];
 
     /** Create axes */
     var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
@@ -58,27 +64,26 @@ function BarChart() {
         series.tooltipContainer.stroke = am4core.color("#ccd6eb");
         series.tooltipHTML = `
         <div class="tooltip">
-          <div class="hbar-tooltip-title" >{categoryY}{categoryX}</div>
+          <div class="tooltip-title" >{categoryY}{categoryX}</div>
           <table class="tooltip-content" >
             <tr>        
               <td align="left">
-              <span class="hbar-bullet-now">&#8226</span>
+              <span style="color: ${lastColor}">&#9632</span>
               Last ${chartType}: 
-              <span class="hbar-value">{now}</span>
+              <span class="bold-value">{now}</span>
               </td>              
             </tr>
             <tr>        
             <td align="left">
-            <span class="hbar-bullet-before">&#8226</span>
+            <span style="color: ${beforeColor}">&#9632</span>
             ${chartType} before: 
-            <span class="hbar-value">{before}</span>
+            <span class="bold-value">{before}</span>
             </td>              
           </tr>
           </table> 
         </div>
         `;
         series.tooltip.getStrokeFromObject = true;
-        series.tooltip.stroke = am4core.color("#000");
         series.tooltip.getFillFromObject = false;
         series.tooltip.background.fill = am4core.color("#FFF");
         series.tooltip.autoTextColor = false;

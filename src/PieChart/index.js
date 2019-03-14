@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./index.css";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
@@ -42,7 +41,7 @@ function BarChart() {
     <div class="tooltip">
       <table class="tooltip-content" >
         <tr>        
-          <td align="left"><span>{activity}</span>: <span class="hbar-value">{amount}</span> ({value.percent.formatNumber('##.')}%)</td>
+          <td align="left"><span>{activity}</span>: <span class="bold-value">{amount}</span> ({value.percent.formatNumber('##.')}%)</td>
         </tr>
       </table> 
     </div>
