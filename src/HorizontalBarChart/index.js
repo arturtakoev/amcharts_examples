@@ -61,7 +61,6 @@ function BarChart() {
       /* Add a single HTML-based tooltip to first series */
       if (field === "now") {
         series.columns.template.height = am4core.percent(50);
-        series.tooltipContainer.stroke = am4core.color("#ccd6eb");
         series.tooltipHTML = `
         <div class="tooltip">
           <div class="tooltip-title" >{categoryY}{categoryX}</div>

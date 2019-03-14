@@ -3,8 +3,17 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import { generateData } from "./utils";
+import { theme } from "../theme";
 
 am4core.useTheme(am4themes_animated);
+
+const {
+  charts: {
+    green: { primary: addedColor },
+    blue: { primary: updatedColor },
+    red: { primary: deletedColor }
+  }
+} = theme;
 
 function BarChart() {
   const initData = generateData();
@@ -23,7 +32,9 @@ function BarChart() {
 
     const colorSet = new am4core.ColorSet();
 
-    colorSet.list = ["#73be58", "#e76c63", "#41aad7"].map(function(color) {
+    colorSet.list = [addedColor, deletedColor, updatedColor].map(function(
+      color
+    ) {
       return new am4core.color(color);
     });
 
@@ -32,11 +43,9 @@ function BarChart() {
     pieSeries.dataFields.category = "activity";
     pieSeries.dataFields.value = "amount";
     pieSeries.colors = colorSet;
-    pieSeries.slices.template.stroke = am4core.color("#fff");
     pieSeries.labels.template.text = "{amount}";
     pieSeries.slices.template.strokeWidth = 2;
     pieSeries.slices.template.strokeOpacity = 1;
-    //pieSeries.slices.template.tooltipText = "{category}: {value.value}";
     pieSeries.slices.template.tooltipHTML = `
     <div class="tooltip">
       <table class="tooltip-content" >
