@@ -185,7 +185,7 @@ class LineChart extends Component {
     this.chart = chart;
     chart.legend.dx = 64; //HACK
 
-    window.chart = chart;
+    //window.chart = chart;
   }
 
   componentWillUnmount() {

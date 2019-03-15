@@ -1,10 +1,17 @@
 export function generateData(type) {
-  let data = [];
+  let data = [
+    {
+      added: null,
+      deleted: null,
+      updated: null
+    }
+  ];
   let deleted = 10;
   let added = 10;
   let updated = 10;
   switch (type) {
     case "24":
+      data[0].time = "00:00";
       for (let i = 1; i < 7; i++) {
         deleted = Math.round(Math.random() * 10);
         added = Math.round(Math.random() * 10);
@@ -18,11 +25,15 @@ export function generateData(type) {
           updated: updated
         });
       }
-      // data.push({
-      //   time: `04:01`,
-      // });
+      data.push({
+        time: "00:01",
+        added: null,
+        deleted: null,
+        updated: null
+      });
       return data;
     case "7":
+      data = [];
       for (let i = 1; i < 7; i++) {
         deleted = Math.round(Math.random() * 10);
         added = Math.round(Math.random() * 10);
@@ -36,6 +47,7 @@ export function generateData(type) {
       }
       return data;
     case "30":
+      data[0].time = "01.03";
       for (let i = 2; i < 7; i++) {
         deleted = Math.round(Math.random() * 10);
         added = Math.round(Math.random() * 10);
@@ -49,7 +61,12 @@ export function generateData(type) {
           updated: updated
         });
       }
-
+      data.push({
+        time: "00:01",
+        added: null,
+        deleted: null,
+        updated: null
+      });
       return data;
     default:
       break;

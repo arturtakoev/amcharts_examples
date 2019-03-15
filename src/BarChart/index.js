@@ -48,10 +48,10 @@ function BarChart() {
     /**
      * Create category axis
      */
-    var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+    let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.renderer.labels.template.location =
       chartType === "7" ? 0.5 : 1;
-    categoryAxis.renderer.ticks.template.location = 0;
+    categoryAxis.renderer.ticks.template.location = 1;
     categoryAxis.dataFields.category = "time";
     categoryAxis.title.text = "Time";
     categoryAxis.cursorTooltipEnabled = false;
@@ -60,10 +60,13 @@ function BarChart() {
     categoryAxis.renderer.ticks.template.strokeOpacity = 0.4;
     categoryAxis.renderer.ticks.template.length = 10;
     categoryAxis.renderer.cellStartLocation = 0.2; //HACK to show tooltip always
+    categoryAxis.endLocation = chartType !== "7" ? 0.5 : 1;
+    categoryAxis.startLocation = chartType !== "7" ? 0.5 : 1;
+
     /**
      * Value axis
      */
-    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
     valueAxis.min = 0;
     valueAxis.title.text = "Amount";
     valueAxis.tooltip.disabled = true;
@@ -75,7 +78,7 @@ function BarChart() {
      * @param {Boolean} withTooltip
      */
     function createSeries(field, name, withTooltip) {
-      var series = chart.series.push(new am4charts.ColumnSeries());
+      let series = chart.series.push(new am4charts.ColumnSeries());
       series.dataFields.valueY = field;
       series.dataFields.categoryX = "time";
       series.dataFields.categoryY = "timeBefore";
@@ -138,7 +141,7 @@ function BarChart() {
     /**
      * Uncomment for debug in browser window
      */
-    //window.chart = chart;
+    window.chart = chart;
   });
 
   return (
