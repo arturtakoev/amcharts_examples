@@ -85,9 +85,10 @@ function BarChart() {
           </div>
           `;
         });
-        series.tooltip.getStrokeFromObject = true;
+        series.tooltip.getStrokeFromObject = false;
         series.tooltip.getFillFromObject = false;
         series.tooltip.background.fill = am4core.color("#FFF");
+        series.tooltip.background.stroke = am4core.color(lastColor);
       }
     }
 
