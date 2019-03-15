@@ -24,6 +24,7 @@ function TreeMap() {
 
     var level1 = chart.seriesTemplates.create("0");
     let level1_bullet = level1.bullets.push(new am4charts.LabelBullet());
+    level1.tooltip.disabled = true;
     level1_bullet.locationY = 0.5;
     level1_bullet.locationX = 0.5;
     level1_bullet.label.text = "[bold]{name}[/]\n{content.formatNumber(##.0)}";
