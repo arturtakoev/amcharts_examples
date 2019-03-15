@@ -5,6 +5,7 @@ import BarChart from "./BarChart";
 import HorizontalBarChart from "./HorizontalBarChart";
 import HorizontalSeparated from "./HorizontalSeparated";
 import Donut from "./PieChart";
+import TreeMap from "./TreeMap";
 
 class App extends Component {
   render() {
@@ -15,6 +16,7 @@ class App extends Component {
         <BarChart />
         <HorizontalBarChart />
         <Donut />
+        <TreeMap />
       </>
     );
   }
