@@ -37,16 +37,20 @@ function BarChart() {
       am4core.color("#FFF")
     ];
 
+    chart.fontSize = 12;
+
     /** Create axes */
     var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = "tag";
     categoryAxis.cursorTooltipEnabled = false;
     categoryAxis.renderer.grid.template.disabled = true;
     //TODO: ticks for now are not displayed properly on Y axis (wrong position)
+    categoryAxis.renderer.minGridDistance = 1;
+    categoryAxis.renderer.labels.template.fill = am4core.color("#4d4d4d");
     categoryAxis.renderer.ticks.template.disabled = false;
     categoryAxis.renderer.ticks.template.strokeOpacity = 0.4;
     categoryAxis.renderer.ticks.template.length = 10;
-    //categoryAxis.renderer.ticks.template.location = 1;
+    categoryAxis.renderer.ticks.template.location = 0;
 
     var valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
     valueAxis.min = 0;
@@ -77,7 +81,7 @@ function BarChart() {
         };
         series.adapter.add("tooltipHTML", function() {
           return `
-          <div class="tooltip">
+          <div style="color: #000; font-size: 12px" >
             <div class="tooltip-title" >{categoryY}{categoryX}</div>
             <table class="tooltip-content" >
               ${generateTooltipContent(chart.series, tooltipConfig)}
@@ -98,6 +102,7 @@ function BarChart() {
     // Add legend
     chart.legend = new am4charts.Legend();
     chart.legend.position = "top";
+    chart.legend.markers.template.scale = 0.7;
     chart.legend.useDefaultMarker = true;
     chart.legend.adapter.add("label");
     chart.legend.dx = 64; //HACK
@@ -121,7 +126,7 @@ function BarChart() {
 
   return (
     <div>
-      <div id="horizbarchartdiv" style={{ width: "100%", height: "500px" }} />
+      <div id="horizbarchartdiv" style={{ width: "100%", height: "320px" }} />
       <button onClick={() => handleButtonClick("7 days")}>7 days</button>
       <button onClick={() => handleButtonClick("24 hours")}>24 hours</button>
       <button onClick={() => handleButtonClick("30 days")}>30 days</button>
