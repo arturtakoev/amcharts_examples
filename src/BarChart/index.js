@@ -45,6 +45,10 @@ function BarChart() {
       am4core.color("#FFF")
     ];
 
+    chart.fontSize = 12;
+    chart.fontFamily = "Roboto";
+    chart.numberFormatter.numberFormat = "#a";
+
     /**
      * Create category axis
      */
@@ -141,7 +145,7 @@ function BarChart() {
     /**
      * Uncomment for debug in browser window
      */
-    window.chart = chart;
+    // window.chart = chart;
   });
 
   return (

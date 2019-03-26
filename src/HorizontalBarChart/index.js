@@ -38,6 +38,8 @@ function BarChart() {
     ];
 
     chart.fontSize = 12;
+    chart.fontFamily = "Roboto";
+    chart.numberFormatter.numberFormat = "#a";
 
     /** Create axes */
     var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
